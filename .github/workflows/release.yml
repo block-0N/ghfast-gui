@@ -24,12 +24,14 @@ jobs:
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
       - name: Build
-        run: wails build -platform windows/amd64 -clean
+        run: wails build -platform windows/amd64 -clean -nsis
 
       - uses: actions/upload-artifact@v4
         with:
           name: ghfast-gui-windows-amd64
-          path: build/bin/ghfast-gui.exe
+          path: |
+            build/bin/ghfast-gui.exe
+            build/bin/*installer.exe
 
   release:
     needs: build

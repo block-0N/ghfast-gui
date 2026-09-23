@@ -10,6 +10,14 @@ export function Download(arg1) {
   return window['go']['main']['App']['Download'](arg1);
 }
 
+export function GetProxy() {
+  return window['go']['main']['App']['GetProxy']();
+}
+
 export function Parse(arg1) {
   return window['go']['main']['App']['Parse'](arg1);
+}
+
+export function SetProxy(arg1) {
+  return window['go']['main']['App']['SetProxy'](arg1);
 }

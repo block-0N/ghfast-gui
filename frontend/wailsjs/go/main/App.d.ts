@@ -5,4 +5,8 @@ export function Cancel():Promise<void>;
 
 export function Download(arg1:string):Promise<void>;
 
+export function GetProxy():Promise<string>;
+
 export function Parse(arg1:string):Promise<string>;
+
+export function SetProxy(arg1:string):Promise<void>;
