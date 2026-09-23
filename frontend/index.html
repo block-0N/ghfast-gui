@@ -12,11 +12,20 @@
         <h1>ghfast GUI</h1>
 
         <div class="row">
-            <input id="url-input" type="text" placeholder="粘贴 GitHub 链接">
+            <input id="url-input" type="text" placeholder="粘贴 GitHub Release 文件直链">
             <button id="parse-btn">解析</button>
         </div>
 
         <pre id="result"></pre>
+
+        <div id="progress-wrap" style="display:none;">
+            <div class="progress-track">
+                <div id="progress-bar" class="progress-fill"></div>
+            </div>
+            <div id="progress-text" class="progress-text"></div>
+        </div>
+
+        <button id="download-btn" style="display:none; margin-top:16px;">下载</button>
     </div>
 
     <script type="module" src="/src/main.js"></script>
