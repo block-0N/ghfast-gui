@@ -285,6 +285,15 @@ func mergeParts(outPath string, parts int) error {
 
 func monitorProgress(emit emitFn, outPath string, total int64, done <-chan struct{}) {
 	start := time.Now()
+
+	// 记录启动时已经存在的分片大小，续传时用于扣除
+	var initial int64
+	for i := 0; i < partsCount; i++ {
+		if fi, err := os.Stat(fmt.Sprintf("%s.part%d", outPath, i)); err == nil {
+			initial += fi.Size()
+		}
+	}
+
 	ticker := time.NewTicker(200 * time.Millisecond)
 	defer ticker.Stop()
 	for {
@@ -298,7 +307,13 @@ func monitorProgress(emit emitFn, outPath string, total int64, done <-chan struc
 					sum += fi.Size()
 				}
 			}
-			speed := float64(sum) / time.Since(start).Seconds()
+			// 只计算本次运行新增的部分
+			delta := sum - initial
+			if delta < 0 {
+				delta = 0
+			}
+			speed := float64(delta) / time.Since(start).Seconds()
+
 			emit("download:progress", map[string]interface{}{
 				"downloaded": sum, "total": total,
 				"speed": speed, "file": outPath, "done": false,
