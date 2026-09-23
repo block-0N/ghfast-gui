@@ -24,9 +24,32 @@ jobs:
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
       - name: Install NSIS
-        run: choco install nsis -y --no-progress
+        run: |
+          choco install nsis -y --no-progress
+          $candidates = @(
+            "C:\Program Files (x86)\NSIS",
+            "C:\Program Files\NSIS"
+          )
+          $found = $null
+          foreach ($p in $candidates) {
+            if (Test-Path "$p\makensis.exe") {
+              $found = $p
+              break
+            }
+          }
+          if (-not $found) {
+            Write-Host "搜索 makensis.exe..."
+            $hit = Get-ChildItem "C:\" -Recurse -Filter "makensis.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
+            if ($hit) { $found = $hit.DirectoryName }
+          }
+          if ($found) {
+            Write-Host "找到 NSIS: $found"
+            echo $found >> $env:GITHUB_PATH
+          } else {
+            Write-Error "未找到 makensis.exe"
+          }
         shell: pwsh
-        
+
       - name: Build
         run: wails build -platform windows/amd64 -clean -nsis
 
