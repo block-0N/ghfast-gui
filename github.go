@@ -85,7 +85,7 @@ func getArtifact(repo, id, token string) (*Artifact, error) {
 	req.Header.Set("Authorization", "token "+token)
 	req.Header.Set("Accept", "application/vnd.github+json")
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := getHTTPClient().Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +107,7 @@ func getRunArtifacts(repo, runID, token string) ([]Artifact, error) {
 	req.Header.Set("Authorization", "token "+token)
 	req.Header.Set("Accept", "application/vnd.github+json")
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := getHTTPClient().Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -128,6 +128,7 @@ func getRunArtifacts(repo, runID, token string) ([]Artifact, error) {
 func resolveURL(apiURL, token string) (string, error) {
 	var finalURL string
 	client := &http.Client{
+		Transport: getTransport(),
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			finalURL = req.URL.String()
 			return http.ErrUseLastResponse
@@ -154,7 +155,7 @@ func resolveReleaseAssetURL(repo, tag, filename, token string) (string, int64, e
 	req.Header.Set("Authorization", "token "+token)
 	req.Header.Set("Accept", "application/vnd.github+json")
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := getHTTPClient().Do(req)
 	if err != nil {
 		return "", 0, err
 	}

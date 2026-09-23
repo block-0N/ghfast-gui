@@ -105,7 +105,7 @@ func downloadMulti(ctx context.Context, emit emitFn, initialURL, outPath string,
 
 func downloadSingle(ctx context.Context, emit emitFn, rawURL, outPath string, total int64) error {
 	req, _ := http.NewRequestWithContext(ctx, "GET", rawURL, nil)
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := getHTTPClient().Do(req)
 	if err != nil {
 		return err
 	}
@@ -187,7 +187,7 @@ func downloadPart(ctx context.Context, getURL func() string, refreshURL func() e
 		req, _ := http.NewRequestWithContext(ctx, "GET", getURL(), nil)
 		req.Header.Set("Range", fmt.Sprintf("bytes=%d-%d", reqStart, end))
 
-		resp, err := http.DefaultClient.Do(req)
+		resp, err := getHTTPClient().Do(req)
 		if err != nil {
 			if attempt < 2 {
 				time.Sleep(time.Second)
@@ -235,7 +235,7 @@ func downloadPart(ctx context.Context, getURL func() string, refreshURL func() e
 func supportsRange(url string) bool {
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Range", "bytes=0-0")
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := getHTTPClient().Do(req)
 	if err != nil {
 		return false
 	}

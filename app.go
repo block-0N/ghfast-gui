@@ -21,6 +21,7 @@ func NewApp() *App {
 
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+	initConfig()
 }
 
 func (a *App) emit(name string, data map[string]interface{}) {
@@ -139,4 +140,11 @@ func (a *App) Cancel() {
 	if a.cancelFunc != nil {
 		a.cancelFunc()
 	}
+}
+func (a *App) GetProxy() string {
+	return getConfig().Proxy
+}
+
+func (a *App) SetProxy(proxy string) error {
+	return setProxy(proxy)
 }

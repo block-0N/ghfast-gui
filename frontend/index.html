@@ -10,7 +10,14 @@
 <body>
     <div id="app">
         <h1>ghfast GUI</h1>
-
+        <details id="settings">
+            <summary>⚙ 代理设置</summary>
+            <div class="settings-body">
+                <input id="proxy-input" type="text" placeholder="http://127.0.0.1:7890（留空 = 直连或使用环境变量）">
+                <button id="save-proxy-btn">保存</button>
+                <span id="proxy-status"></span>
+            </div>
+        </details>
         <div class="row">
             <input id="url-input" type="text" placeholder="粘贴 GitHub Release 直链 / Run 链接 / Artifact API 链接">
             <button id="parse-btn">解析</button>

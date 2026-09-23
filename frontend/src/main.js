@@ -1,7 +1,7 @@
 import './style.css';
 import './app.css';
 
-import { Parse, Download, Cancel } from '../wailsjs/go/main/App';
+import { Parse, Download, Cancel, GetProxy, SetProxy } from '../wailsjs/go/main/App';
 import { EventsOn } from '../wailsjs/runtime/runtime';
 
 const input = document.getElementById('url-input');
@@ -152,4 +152,33 @@ EventsOn('download:done', (d) => {
     cancelBtn.style.display = 'none';
 });
 
+const proxyInput = document.getElementById('proxy-input');
+const saveProxyBtn = document.getElementById('save-proxy-btn');
+const proxyStatus = document.getElementById('proxy-status');
+
+async function loadProxy() {
+    try {
+        const p = await GetProxy();
+        proxyInput.value = p || '';
+        if (p) proxyStatus.textContent = '当前已启用';
+        else proxyStatus.textContent = '未设置（直连）';
+    } catch (e) {
+        proxyStatus.textContent = '读取失败';
+    }
+}
+
+saveProxyBtn.addEventListener('click', async () => {
+    saveProxyBtn.disabled = true;
+    try {
+        await SetProxy(proxyInput.value.trim());
+        proxyStatus.textContent = proxyInput.value.trim() ? '已保存' : '已清除';
+        setTimeout(() => { proxyStatus.textContent = proxyInput.value.trim() ? '当前已启用' : '未设置（直连）'; }, 1500);
+    } catch (e) {
+        proxyStatus.textContent = '错误: ' + e;
+    } finally {
+        saveProxyBtn.disabled = false;
+    }
+});
+
+loadProxy();
 renderHistory();
