@@ -11,7 +11,8 @@ import (
 )
 
 type App struct {
-	ctx context.Context
+	ctx        context.Context
+	cancelFunc context.CancelFunc
 }
 
 func NewApp() *App {
@@ -52,7 +53,12 @@ func (a *App) Download(input string) error {
 		return err
 	}
 
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(a.ctx)
+	a.cancelFunc = cancel
+	defer func() {
+		cancel()
+		a.cancelFunc = nil
+	}()
 	emit := a.emit
 
 	switch p.Kind {
@@ -126,4 +132,11 @@ func (a *App) Download(input string) error {
 		return nil
 	}
 	return fmt.Errorf("当前不支持下载类型: %s", p.Kind)
+}
+
+// Cancel 取消正在进行的下载
+func (a *App) Cancel() {
+	if a.cancelFunc != nil {
+		a.cancelFunc()
+	}
 }

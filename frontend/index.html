@@ -12,10 +12,10 @@
         <h1>ghfast GUI</h1>
 
         <div class="row">
-            <input id="url-input" type="text" placeholder="粘贴 GitHub Release 文件直链">
+            <input id="url-input" type="text" placeholder="粘贴 GitHub Release 直链 / Run 链接 / Artifact API 链接">
             <button id="parse-btn">解析</button>
         </div>
-        <div class="hint">多线程（8 并发）+ 断点续传。中断后重新点下载会从断点继续。</div>
+
         <pre id="result"></pre>
 
         <div id="progress-wrap" style="display:none;">
@@ -25,7 +25,15 @@
             <div id="progress-text" class="progress-text"></div>
         </div>
 
-        <button id="download-btn" style="display:none; margin-top:16px;">下载</button>
+        <div class="actions">
+            <button id="download-btn" style="display:none;">下载</button>
+            <button id="cancel-btn" class="btn-secondary" style="display:none;">取消</button>
+        </div>
+
+        <div id="history-section" style="display:none;">
+            <h2>历史记录</h2>
+            <ul id="history-list"></ul>
+        </div>
     </div>
 
     <script type="module" src="/src/main.js"></script>

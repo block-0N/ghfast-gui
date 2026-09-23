@@ -93,3 +93,78 @@ button:hover {
     color: #6e7681;
     margin-bottom: 16px;
 }
+
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.btn-secondary {
+    background: #21262d;
+    border: 1px solid #30363d;
+    color: #e6edf3;
+}
+
+.btn-secondary:hover {
+    background: #30363d;
+}
+
+#history-section {
+    margin-top: 40px;
+}
+
+#history-section h2 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #8b949e;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+#history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.15s;
+}
+
+.history-item:hover {
+    background: #1c2128;
+    border-color: #58a6ff;
+}
+
+.hist-name {
+    flex: 1;
+    color: #e6edf3;
+    font-family: 'Consolas', monospace;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hist-time {
+    color: #6e7681;
+    font-size: 12px;
+}
+
+.hist-size {
+    color: #6e7681;
+    font-size: 12px;
+    min-width: 60px;
+    text-align: right;
+}
