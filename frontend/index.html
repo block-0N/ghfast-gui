@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta charset="UTF-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>ghfast-gui</title>
 </head>
+
 <body>
-<div id="app"></div>
-<script src="./src/main.js" type="module"></script>
+    <div id="app">
+        <h1>ghfast GUI</h1>
+
+        <div class="row">
+            <input id="url-input" type="text" placeholder="粘贴 GitHub 链接">
+            <button id="parse-btn">解析</button>
+        </div>
+
+        <pre id="result"></pre>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
 </body>
+
 </html>
