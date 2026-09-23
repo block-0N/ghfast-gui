@@ -22,9 +22,9 @@ parseBtn.addEventListener('click', async () => {
         const text = await Parse(input.value);
         result.textContent = text;
         currentURL = input.value.trim();
-        if (text.includes('release-asset')) {
-            downloadBtn.style.display = 'inline-block';
-        }
+        downloadBtn.style.display = 'inline-block';
+        downloadBtn.textContent = '下载';
+        downloadBtn.disabled = false;
     } catch (err) {
         result.textContent = '错误: ' + err;
     }
@@ -32,25 +32,39 @@ parseBtn.addEventListener('click', async () => {
 
 downloadBtn.addEventListener('click', async () => {
     downloadBtn.disabled = true;
+    downloadBtn.textContent = '下载中...';
     progressWrap.style.display = 'block';
+    progressBar.style.width = '0%';
+    progressText.textContent = '准备中...';
     try {
         await Download(currentURL);
+        downloadBtn.textContent = '完成';
     } catch (err) {
         result.textContent = '下载错误: ' + err;
-    } finally {
+        downloadBtn.textContent = '重试';
         downloadBtn.disabled = false;
     }
 });
 
-EventsOn('download:progress', (data) => {
-    const pct = data.total > 0 ? (data.downloaded / data.total * 100) : 0;
+EventsOn('download:file', (d) => {
+    progressText.textContent = `正在下载 (${d.index + 1}/${d.total}): ${d.name}`;
+    progressBar.style.width = '0%';
+});
+
+EventsOn('download:progress', (d) => {
+    const pct = d.total > 0 ? (d.downloaded / d.total * 100) : 0;
     progressBar.style.width = pct.toFixed(1) + '%';
-    const mb = (data.downloaded / 1024 / 1024).toFixed(1);
-    const totalMB = (data.total / 1024 / 1024).toFixed(1);
-    const speed = (data.speed / 1024 / 1024).toFixed(2);
-    if (data.done) {
-        progressText.textContent = `完成 · 保存到 ${data.file}`;
+    const mb = (d.downloaded / 1024 / 1024).toFixed(1);
+    const totalMB = d.total > 0 ? (d.total / 1024 / 1024).toFixed(1) : '?';
+    const speed = (d.speed / 1024 / 1024).toFixed(2);
+    if (d.done) {
+        progressText.textContent = `完成 · ${d.file}`;
     } else {
         progressText.textContent = `${pct.toFixed(1)}%  ${mb}/${totalMB} MB  ${speed} MB/s`;
     }
+});
+
+EventsOn('download:done', (d) => {
+    progressText.textContent = `全部完成 · 保存于 ${d.dir}`;
+    downloadBtn.textContent = '完成';
 });
